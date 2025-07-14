@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>San Andreas DMV Unified Portal</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+  <style>
+    body, html {
+      margin: 0; padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f4f4;
+    }
+    .screen {
+      display: none;
+      padding: 20px;
+    }
+    .active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+    }
+    button {
+      background-color: #003764;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    header {
+      background-color: #003764;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .hidden { display: none; }
+    .dashboard-section {
+      background: white;
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    footer {
+      text-align: center;
+      background: #003764;
+      color: white;
+      padding: 20px;
+      margin-top: 40px;
+    }
+  
+    .profile-tile {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .profile-tile:hover {
+      transform: scale(1.05);
+    }
+
+</style>
+</head>
+<body>
+
+  
+  
+  <div class="screen active" id="landingScreen" style="background: url('Portal background.png') no-repeat center center fixed; background-size: cover; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <header style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px;">
+      <h1 style="color: white;">San Andreas DMV Portal</h1>
+    </header>
+    <button onclick="showScreen('adminDashboard')" style="margin: 20px; padding: 15px 30px;">Employee Dashboard</button>
+    <button onclick="showScreen('loginScreen')" style="margin: 20px; padding: 15px 30px;">Front Desk</button>
+  </div>
+
+
+  </div>
+
+  <div class="screen" id="signupScreen">
+    <h2>Create Your DMV Account</h2>
+    <div class="form-group">
+      <label>First Name</label><input type="text" id="signupFirst">
+    </div>
+    <div class="form-group">
+      <label>Last Name</label><input type="text" id="signupLast">
+    </div>
+    <div class="form-group">
+      <label>Gender</label>
+      <select id="signupGender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Character SSN/SIN</label><input type="text" id="signupSSN">
+    </div>
+    <div class="form-group">
+      <label>Password</label><input type="password" id="signupPass">
+    </div>
+    <button onclick="registerUser()">Sign Up</button>
+    <p><a href="#" onclick="showScreen('loginScreen')">Already have an account?</a></p>
+    <button onclick="showScreen('landingScreen')" style="margin-top: 20px;">Return to Home</button>
+  </div>
+    <h2>Create Your DMV Account</h2>
+    <div class="form-group">
+      <label>First Name</label><input type="text" id="signupFirst">
+    </div>
+    <div class="form-group">
+      <label>Last Name</label><input type="text" id="signupLast">
+    </div>
+    <div class="form-group">
+      <label>Gender</label>
+      <select id="signupGender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Character SSN/SIN</label><input type="text" id="signupSSN">
+    </div>
+    
+    <div class="form-group">
+      <label>Password</label><input type="password" id="signupPass">
+    </div>
+    <button onclick="registerUser()">Sign Up</button>
+    <p><a href="#" onclick="showScreen('loginScreen')">Already have an account?</a></p>
+    <button onclick="showScreen('landingScreen')" style="margin-top: 20px;">Return to Home</button>
+
+  </div>
+
+  
+  <div class="screen" id="loginScreen">
+    <h2>Select Your Character</h2>
+    <div id="quickLoginOptions" style="margin-bottom: 20px;"></div>
+    <button onclick="showScreen('landingScreen')" style="margin-top: 20px;">Return to Home</button>
+  </div>
+    <h2>Select Your Character</h2>
+    <div id="quickLoginOptions" style="margin-bottom: 20px;"></div>
+  </div>
+
+
+    <h2>Log In to Your DMV Account</h2>
+    <div class="form-group">
+      <label>First Name</label><input type="text" id="loginFirst">
+    </div>
+    <div class="form-group">
+      <label>Last Name</label><input type="text" id="loginLast">
+    </div>
+    <div class="form-group">
+      <label>Character SSN/SIN</label><input type="text" id="loginSSN">
+    </div>
+    <div class="form-group">
+      <label>Password</label><input type="password" id="loginPass">
+    </div>
+    <button onclick="loginUser()">Login</button>
+    <p><a href="#" onclick="showScreen('signupScreen')">Create an account</a></p>
+    <button onclick="showScreen('landingScreen')" style="margin-top: 20px;">Return to Home</button>
+
+  </div>
+
+  <div class="screen" id="userDashboard">
+    <header><h1>Welcome to the DMV Portal</h1></header>
+    <div class="dashboard-section">
+      <h3>Your Applications</h3>
+      <ul id="userApplications"></ul>
+    
+    <div class="dashboard-section">
+      <h3>Submit ID Renewal Application</h3>
+      <div class="form-group">
+        <label>Reason for Renewal</label>
+        <input type="text" id="renewReason" placeholder="e.g. Lost ID, Expired, Name change">
+      </div>
+      <button onclick="submitRenewal()">Submit ID Renewal</button>
+    </div>
+
+    <div class="dashboard-section hidden" id="idRenewalUI" class="hidden" style="opacity: 0; transition: opacity 0.5s ease;">
+      <h3>Submit ID Renewal Application</h3>
+      
+    <div class="form-group">
+      <label>Reason for Renewal</label>
+      <input type="text" id="renewReason" placeholder="e.g. Lost ID, Expired, Name change">
+    </div>
+    <button onclick="submitRenewal()">Submit ID Renewal</button>
+
+    </div>
+</div>
+    <div class="dashboard-section">
+      <h3>Apply for a Service</h3>
+      <button onclick="alert('This will link to the License Test UI')">Take License Test</button>
+      <button onclick="const form = document.getElementById('idRenewalUI');
+      form.classList.remove('hidden');
+      setTimeout(() => { form.style.opacity = 1; }, 10);">Renew ID</button>
+    </div>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <div class="screen" id="adminDashboard">
+    <header><h1>San Andreas DMV – Admin Dashboard</h1></header>
+    <div class="dashboard-section">
+      <h2>License Test Submissions</h2><a href="#">View License Test Results</a>
+    </div>
+    <div class="dashboard-section">
+      <h2>Permit Test Submissions</h2><a href="#">View Permit Test Results</a>
+    </div>
+    <div class="dashboard-section">
+      <h2>ID Card Renewals</h2><a href="#">Review ID Renewal Requests</a>
+    
+    <div class="dashboard-section">
+      <h2>Submitted ID Renewals</h2>
+      <ul id="adminRenewalLog"></ul>
+    </div>
+</div>
+    <button onclick="showScreen('landingScreen')">Back to Main</button>
+  </div>
+
+  <footer>&copy; 2025 San Andreas Department of Motor Vehicles</footer>
+
+  <script>
+    const users = [];
+function saveLoginCharacter(user) {
+      let saved = JSON.parse(localStorage.getItem('dmvLogins')) || [];
+      const exists = saved.find(u => u.first === user.first && u.last === user.last && u.ssn === user.ssn);
+      if (!exists) {
+        saved.push({ first: user.first, last: user.last, ssn: user.ssn, pass: user.pass, gender: user.gender });
+        localStorage.setItem('dmvLogins', JSON.stringify(saved));
+      }
+    }
+
+    function showQuickLogins() {
+      const saved = JSON.parse(localStorage.getItem('dmvLogins')) || [];
+      const container = document.getElementById('quickLoginOptions');
+      container.innerHTML = '<h3>Select Your Character</h3>';
+
+      const colors = ['#333', '#d35400', '#16a085', '#f39c12', '#2980b9', '#8e44ad'];
+      saved.forEach((u, index) => {
+        const tile = document.createElement('div');
+        tile.className = 'profile-tile';
+        tile.style.backgroundColor = colors[index % colors.length];
+        tile.innerHTML = `<div style='font-size:32px;'>${u.gender === 'female' ? '👩' : '👨'}</div><div>${u.first} ${u.last}</div>`;
+        tile.onclick = () => {
+          const match = users.find(x => x.first === u.first && x.last === u.last && x.ssn === u.ssn && x.pass === u.pass);
+          if (match) {
+            document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
+            showScreen('userDashboard');
+const ding = document.getElementById('loginDing');
+          ding.volume = 1.0;
+          ding.currentTime = 0;
+          ding.play();
+          let fadeInterval = setInterval(() => {
+            if (ding.volume > 0.05) {
+              ding.volume -= 0.05;
+            } else {
+              ding.volume = 0;
+              clearInterval(fadeInterval);
+            }
+          }, 150);
+          } else {
+            alert('Saved character no longer exists in memory. Please sign up again.');
+          }
+        };
+        const del = document.createElement('button');
+        del.textContent = '🗑️';
+        del.style.marginTop = '5px';
+        del.style.padding = '4px';
+        del.style.border = 'none';
+        del.style.borderRadius = '4px';
+        del.style.cursor = 'pointer';
+        del.onclick = (e) => {
+          e.stopPropagation();
+          saved.splice(index, 1);
+          localStorage.setItem('dmvLogins', JSON.stringify(saved));
+          showQuickLogins();
+        };
+        tile.appendChild(del);
+        container.appendChild(tile);
+      });
+    }
+      const saved = JSON.parse(localStorage.getItem('dmvLogins')) || [];
+      const container = document.getElementById('quickLoginOptions');
+      container.innerHTML = '<h3>Quick Login:</h3>';
+      saved.forEach(u => {
+        
+        const avatar = document.createElement('img');
+        avatar.src = u.gender === 'female' ? 'https://i.imgur.com/LZPTzZG.png' : 'https://i.imgur.com/0y0a3zf.png';
+        avatar.alt = u.gender;
+        avatar.style.width = '60px';
+        avatar.style.height = '60px';
+        avatar.style.borderRadius = '50%';
+        avatar.style.display = 'block';
+        avatar.style.margin = '0 auto 8px auto';
+        container.appendChild(avatar);
+
+        const btn = document.createElement('button');
+        btn.textContent = `${u.first} ${u.last}`;
+        btn.style.display = 'block';
+        btn.style.marginBottom = '10px';
+        btn.onclick = () => {
+          const match = users.find(x => x.first === u.first && x.last === u.last && x.ssn === u.ssn && x.pass === u.pass);
+          if (match) {
+            document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
+            showScreen('userDashboard');
+const ding = document.getElementById('loginDing');
+          ding.volume = 1.0;
+          ding.currentTime = 0;
+          ding.play();
+          let fadeInterval = setInterval(() => {
+            if (ding.volume > 0.05) {
+              ding.volume -= 0.05;
+            } else {
+              ding.volume = 0;
+              clearInterval(fadeInterval);
+            }
+          }, 150);
+          } else {
+            alert('Saved character no longer exists in memory. Please log in again.');
+          }
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    // Call when login screen is shown
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      if (id === 'loginScreen') showQuickLogins();
+    }
+const idRenewals = [];
+
+    function submitRenewal() {
+      const reason = document.getElementById('renewReason').value.trim();
+      if (!reason) return alert('Please enter a reason.');
+      const currentUser = users.find(u =>
+        u.first === document.getElementById('loginFirst').value.trim() &&
+        u.last === document.getElementById('loginLast').value.trim() &&
+        u.ssn === document.getElementById('loginSSN').value.trim()
+      );
+      if (currentUser) {
+        const entry = `${currentUser.first} ${currentUser.last} (${currentUser.ssn}): ${reason}`;
+        idRenewals.push(entry);
+        document.getElementById('userApplications').innerHTML += `<li>ID Renewal - Submitted</li>`;
+        alert('Your renewal application has been submitted.');
+      }
+    }
+
+    function renderAdminRenewals() {
+      const list = document.getElementById('adminRenewalLog');
+      list.innerHTML = '';
+      idRenewals.forEach(app => {
+        const li = document.createElement('li');
+        li.textContent = app;
+        list.appendChild(li);
+      });
+    }
+
+    function employeeLogin() {
+      const pw = prompt('Enter employee password:');
+      if (pw === 'DMV.EOTS') {
+        showScreen('adminDashboard');
+        renderAdminRenewals();
+      } else {
+        alert('Incorrect password.');
+      }
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function registerUser() {
+      const user = {
+        first: document.getElementById('signupFirst').value.trim(),
+        last: document.getElementById('signupLast').value.trim(),
+        ssn: document.getElementById('signupSSN').value.trim(),
+        pass: document.getElementById('signupPass').value,
+        gender: document.getElementById('signupGender').value
+      };
+      if (user.first && user.last && user.ssn && user.pass) {
+        users.push(user);
+        alert('Account created successfully!');
+        showScreen('loginScreen');
+      } else {
+        alert('Please fill in all fields.');
+      }
+    }
+
+    function loginUser() {
+      const first = document.getElementById('loginFirst').value.trim();
+      const last = document.getElementById('loginLast').value.trim();
+      const ssn = document.getElementById('loginSSN').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      const user = users.find(u => u.first === first && u.last === last && u.ssn === ssn && u.pass === pass);
+      if (user) {
+        saveLoginCharacter(user);
+        document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
+        showScreen('userDashboard');
+const ding = document.getElementById('loginDing');
+          ding.volume = 1.0;
+          ding.currentTime = 0;
+          ding.play();
+          let fadeInterval = setInterval(() => {
+            if (ding.volume > 0.05) {
+              ding.volume -= 0.05;
+            } else {
+              ding.volume = 0;
+              clearInterval(fadeInterval);
+            }
+          }, 150);
+      } else {
+        alert('Invalid login credentials.');
+      }
+    }
+
+    function logout() {
+      showScreen('landingScreen');
+    }
+
+    function employeeLogin() {
+      const pw = prompt('Enter employee password:');
+      if (pw === 'DMV.EOTS') {
+        showScreen('adminDashboard');
+      } else {
+        alert('Incorrect password.');
+      }
+    }
+  </script>
+
+<audio id="loginDing" src="https://freesound.org/data/previews/341/341695_5260877-lq.mp3" preload="auto"></audio>
+
+</body>
+</html>
