@@ -199,7 +199,7 @@ function saveLoginCharacter(user) {
           const match = users.find(x => x.first === u.first && x.last === u.last && x.ssn === u.ssn && x.pass === u.pass);
           if (match) {
             document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
-            showScreen('postLoginScreen');
+            showScreen('userDashboard');
           } else {
             alert('Saved character no longer exists in memory. Please log in again.');
           }
@@ -282,7 +282,7 @@ const idRenewals = [];
       if (user) {
         saveLoginCharacter(user);
         document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
-        showScreen('postLoginScreen');
+        showScreen('userDashboard');
       } else {
         alert('Invalid login credentials.');
       }
@@ -301,12 +301,9 @@ const idRenewals = [];
       }
     }
   </script>
+</body>
+</html>
 
-  <div class="screen" id="postLoginScreen" style="text-align: center; padding-top: 100px;">
-    <h2>Welcome to Your DMV Panel</h2>
-    <button onclick="showScreen('userDashboard')" style="margin: 20px; padding: 15px 30px;">Renew</button>
-    <button onclick="alert('Redirecting to Issued ID system')" style="margin: 20px; padding: 15px 30px;">Have Issued</button>
-  </div>
 
 </body>
 </html>
