@@ -120,18 +120,22 @@
     <p><a href="#" onclick="showScreen('signupScreen')">Create an account</a></p>
   </div>
 
+  
   <div class="screen" id="userDashboard">
     <header><h1>Welcome to the DMV Portal</h1></header>
     <div class="dashboard-section">
-      <h3>Your Applications</h3>
-      <ul id="userApplications"></ul>
-    
-    <div class="dashboard-section">
-      <h3>Submit ID Renewal Application</h3>
-      <div class="form-group">
-        <label>Reason for Renewal</label>
-        <input type="text" id="renewReason" placeholder="e.g. Lost ID, Expired, Name change">
-      </div>
+      <h3>Choose a Service</h3>
+      <button onclick="alert('Issue Driver License')">Issue Driver License</button>
+      <button onclick="alert('Renew Driver License')">Renew Driver License</button>
+      <button onclick="alert('Issue State ID')">Issue State ID</button>
+      <button onclick="alert('Renew State ID')">Renew State ID</button>
+      <button onclick="alert('Register a Vehicle')">Register a Vehicle</button>
+      <button onclick="alert('Renew Vehicle Registration')">Renew Vehicle Registration</button>
+      <button onclick="alert('Submit Voter Registration')">Voter Registration</button>
+    </div>
+    <button onclick="logout()">Logout</button>
+  </div>
+
       <button onclick="submitRenewal()">Submit ID Renewal</button>
     </div>
 </div>
