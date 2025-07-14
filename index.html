@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>San Andreas DMV Unified Portal</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+  <style>
+    body, html {
+      margin: 0; padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f4f4;
+    }
+    .screen {
+      display: none;
+      padding: 20px;
+    }
+    .active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+    }
+    button {
+      background-color: #003764;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    header {
+      background-color: #003764;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .hidden { display: none; }
+    .dashboard-section {
+      background: white;
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    footer {
+      text-align: center;
+      background: #003764;
+      color: white;
+      padding: 20px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="screen active" id="landingScreen">
+    <header><h1>San Andreas DMV</h1></header>
+    <div style="text-align: center;">
+      <button onclick="showScreen('loginScreen')">Login</button>
+      <button onclick="showScreen('signupScreen')">Sign Up</button>
+      <button onclick="employeeLogin()">Employee Portal</button>
+    </div>
+  </div>
+
+  <div class="screen" id="signupScreen">
+    <h2>Create Your DMV Account</h2>
+    <div class="form-group">
+      <label>First Name</label><input type="text" id="signupFirst">
+    </div>
+    <div class="form-group">
+      <label>Last Name</label><input type="text" id="signupLast">
+    </div>
+    <div class="form-group">
+      <label>Character SSN/SIN</label><input type="text" id="signupSSN">
+    </div>
+    <div class="form-group">
+      <label>Password</label><input type="password" id="signupPass">
+    </div>
+    <button onclick="registerUser()">Sign Up</button>
+    <p><a href="#" onclick="showScreen('loginScreen')">Already have an account?</a></p>
+  </div>
+
+  <div class="screen" id="loginScreen">
+    <h2>Log In to Your DMV Account</h2>
+    <div class="form-group">
+      <label>First Name</label><input type="text" id="loginFirst">
+    </div>
+    <div class="form-group">
+      <label>Last Name</label><input type="text" id="loginLast">
+    </div>
+    <div class="form-group">
+      <label>Character SSN/SIN</label><input type="text" id="loginSSN">
+    </div>
+    <div class="form-group">
+      <label>Password</label><input type="password" id="loginPass">
+    </div>
+    <button onclick="loginUser()">Login</button>
+    <p><a href="#" onclick="showScreen('signupScreen')">Create an account</a></p>
+  </div>
+
+  <div class="screen" id="userDashboard">
+    <header><h1>Welcome to the DMV Portal</h1></header>
+    <div class="dashboard-section">
+      <h3>Your Applications</h3>
+      <ul id="userApplications"></ul>
+    </div>
+    <div class="dashboard-section">
+      <h3>Apply for a Service</h3>
+      <button onclick="alert('This will link to the License Test UI')">Take License Test</button>
+      <button onclick="alert('This will link to the ID Renewal UI')">Renew ID</button>
+    </div>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <div class="screen" id="adminDashboard">
+    <header><h1>San Andreas DMV – Admin Dashboard</h1></header>
+    <div class="dashboard-section">
+      <h2>License Test Submissions</h2><a href="#">View License Test Results</a>
+    </div>
+    <div class="dashboard-section">
+      <h2>Permit Test Submissions</h2><a href="#">View Permit Test Results</a>
+    </div>
+    <div class="dashboard-section">
+      <h2>ID Card Renewals</h2><a href="#">Review ID Renewal Requests</a>
+    </div>
+    <button onclick="showScreen('landingScreen')">Back to Main</button>
+  </div>
+
+  <footer>&copy; 2025 San Andreas Department of Motor Vehicles</footer>
+
+  <script>
+    const users = [];
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function registerUser() {
+      const user = {
+        first: document.getElementById('signupFirst').value.trim(),
+        last: document.getElementById('signupLast').value.trim(),
+        ssn: document.getElementById('signupSSN').value.trim(),
+        pass: document.getElementById('signupPass').value
+      };
+      if (user.first && user.last && user.ssn && user.pass) {
+        users.push(user);
+        alert('Account created successfully!');
+        showScreen('loginScreen');
+      } else {
+        alert('Please fill in all fields.');
+      }
+    }
+
+    function loginUser() {
+      const first = document.getElementById('loginFirst').value.trim();
+      const last = document.getElementById('loginLast').value.trim();
+      const ssn = document.getElementById('loginSSN').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      const user = users.find(u => u.first === first && u.last === last && u.ssn === ssn && u.pass === pass);
+      if (user) {
+        document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
+        showScreen('userDashboard');
+      } else {
+        alert('Invalid login credentials.');
+      }
+    }
+
+    function logout() {
+      showScreen('landingScreen');
+    }
+
+    function employeeLogin() {
+      const pw = prompt('Enter employee password:');
+      if (pw === 'DMV.EOTS') {
+        showScreen('adminDashboard');
+      } else {
+        alert('Incorrect password.');
+      }
+    }
+  </script>
+</body>
+</html>
