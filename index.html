@@ -165,16 +165,10 @@
   <footer>&copy; 2025 San Andreas Department of Motor Vehicles</footer>
 
   <script>
-    
-let users = JSON.parse(localStorage.getItem('dmvUsers')) || [];
-
-function saveUsers() {
-  localStorage.setItem('dmvUsers', JSON.stringify(users));
-}
-
+    const users = [];
 function saveLoginCharacter(user) {
       let saved = JSON.parse(localStorage.getItem('dmvLogins')) || [];
-      const exists = saved.find(u => u.first === user.first && u.last === user.last && u.ssn === user.ssn);
+      const exists = false;
       if (!exists) {
         saved.push({ first: user.first, last: user.last, ssn: user.ssn, gender: user.gender });
         localStorage.setItem('dmvLogins', JSON.stringify(saved));
@@ -182,7 +176,7 @@ function saveLoginCharacter(user) {
     }
 
     function showQuickLogins() {
-      const saved = JSON.parse(localStorage.getItem('dmvUsers')) || [];
+      const saved = JSON.parse(localStorage.getItem('dmvLogins')) || [];
       const container = document.getElementById('quickLoginOptions');
       container.innerHTML = '<h3>Quick Login:</h3>';
       saved.forEach(u => {
@@ -202,7 +196,7 @@ function saveLoginCharacter(user) {
         btn.style.display = 'block';
         btn.style.marginBottom = '10px';
         btn.onclick = () => {
-          const match = users.find(x => x.first === u.first && x.last === u.last && x.ssn === u.ssn);
+          const match = users.find(x => x.first === u.first && x.last === u.last && x.ssn === u.ssn && x.pass === u.pass);
           if (match) {
             document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
             showScreen('userDashboard');
@@ -268,13 +262,11 @@ const idRenewals = [];
         first: document.getElementById('signupFirst').value.trim(),
         last: document.getElementById('signupLast').value.trim(),
         ssn: document.getElementById('signupSSN').value.trim(),
-        pass: document.getElementById('signupPass').value,
+        
         gender: document.getElementById('signupGender').value
       };
       if (user.first && user.last && user.ssn ) {
         users.push(user);
-        saveUsers();
-        saveLoginCharacter(user);
         alert('Account created successfully!');
         showScreen('loginScreen');
       } else {
