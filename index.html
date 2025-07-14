@@ -120,22 +120,18 @@
     <p><a href="#" onclick="showScreen('signupScreen')">Create an account</a></p>
   </div>
 
-  
   <div class="screen" id="userDashboard">
     <header><h1>Welcome to the DMV Portal</h1></header>
     <div class="dashboard-section">
-      <h3>Choose a Service</h3>
-      <button onclick="alert('Issue Driver License')">Issue Driver License</button>
-      <button onclick="alert('Renew Driver License')">Renew Driver License</button>
-      <button onclick="alert('Issue State ID')">Issue State ID</button>
-      <button onclick="alert('Renew State ID')">Renew State ID</button>
-      <button onclick="alert('Register a Vehicle')">Register a Vehicle</button>
-      <button onclick="alert('Renew Vehicle Registration')">Renew Vehicle Registration</button>
-      <button onclick="alert('Submit Voter Registration')">Voter Registration</button>
-    </div>
-    <button onclick="logout()">Logout</button>
-  </div>
-
+      <h3>Your Applications</h3>
+      <ul id="userApplications"></ul>
+    
+    <div class="dashboard-section">
+      <h3>Submit ID Renewal Application</h3>
+      <div class="form-group">
+        <label>Reason for Renewal</label>
+        <input type="text" id="renewReason" placeholder="e.g. Lost ID, Expired, Name change">
+      </div>
       <button onclick="submitRenewal()">Submit ID Renewal</button>
     </div>
 </div>
@@ -203,7 +199,7 @@ function saveLoginCharacter(user) {
           const match = users.find(x => x.first === u.first && x.last === u.last && x.ssn === u.ssn && x.pass === u.pass);
           if (match) {
             document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
-            showScreen('userDashboard');
+            showScreen('postLoginScreen');
           } else {
             alert('Saved character no longer exists in memory. Please log in again.');
           }
@@ -286,7 +282,7 @@ const idRenewals = [];
       if (user) {
         saveLoginCharacter(user);
         document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
-        showScreen('userDashboard');
+        showScreen('postLoginScreen');
       } else {
         alert('Invalid login credentials.');
       }
@@ -305,5 +301,12 @@ const idRenewals = [];
       }
     }
   </script>
+
+  <div class="screen" id="postLoginScreen" style="text-align: center; padding-top: 100px;">
+    <h2>Welcome to Your DMV Panel</h2>
+    <button onclick="showScreen('userDashboard')" style="margin: 20px; padding: 15px 30px;">Renew</button>
+    <button onclick="alert('Redirecting to Issued ID system')" style="margin: 20px; padding: 15px 30px;">Have Issued</button>
+  </div>
+
 </body>
 </html>
