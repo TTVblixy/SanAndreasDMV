@@ -138,7 +138,7 @@
     <div class="dashboard-section">
       <h3>Apply for a Service</h3>
       <button onclick="showScreen('testMenu')">Test</button>
-      
+      <button onclick="alert('This will link to the ID Renewal UI')">Renewal</button>
     </div>
     <button onclick="logout()">Logout</button>
   </div>
@@ -339,10 +339,10 @@ const idRenewals = [];
 
   <div class="screen" id="testMenu" style="text-align: center; padding-top: 100px;">
     <h2>Select a Test Type</h2>
-    <button onclick="window.open('https://forms.gle/CG3qnyqMWVZAxZaR6', '_blank')" style="margin: 15px; padding: 15px 30px;">Permit Test</button>
-    <button onclick="window.open('https://forms.gle/CG3qnyqMWVZAxZaR6', '_blank')" style="margin: 15px; padding: 15px 30px;">Driver's License Test</button>
-    <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScFhOLZWc6cE6R7cD5LWENC-pT3mk4hQe3kWNJ6TMXAPSr43Q/viewform?usp=header', '_blank')" style="margin: 15px; padding: 15px 30px;">Motorcycle License Test</button>
-    <button onclick="window.open('https://forms.gle/WnT8C9dj2ncXsfAf9', '_blank')" style="margin: 15px; padding: 15px 30px;">CDL Test</button>
+    <button onclick="alert('Launching Permit Test...')" style="margin: 15px; padding: 15px 30px;">Permit Test</button>
+    <button onclick="alert('Launching Driver's License Test...')" style="margin: 15px; padding: 15px 30px;">Driver's License Test</button>
+    <button onclick="alert('Launching Motorcycle License Test...')" style="margin: 15px; padding: 15px 30px;">Motorcycle License Test</button>
+    <button onclick="alert('Launching CDL Test...')" style="margin: 15px; padding: 15px 30px;">CDL Test</button>
     <br><br>
     <button onclick="showScreen('userDashboard')" style="margin-top: 40px;">Back</button>
   </div>
@@ -357,31 +357,24 @@ const idRenewals = [];
     
     <div class="dashboard-section">
       <h2>Driver’s License Test Results</h2>
-      
-<ul id="adminDriverResults"></ul>
+      <ul id="adminDriverResults"></ul>
+    </div>
 
+    
 <div class="dashboard-section">
   <h2>Motorcycle License Test Results</h2>
-  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1QhVnMPq0gKXrKjEQfOa9FJmTxY6pPbWa/edit?usp=sharing', '_blank')">View Motorcycle Test Results</button>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1QEJtr7tFbyRUNuY2yLOFZR7zeBPK9DXr34LEg2m21Yg/edit?usp=sharing', '_blank')">View Motorcycle Test Results</button>
 </div>
 
 <div class="dashboard-section">
-  <h2>Driving Test Results</h2>
-  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1qRH_1L2LBnq6S4VODIjvW3r0p-DL6OcJ/edit?usp=sharing', '_blank')">View Driving Test Results</button>
+  <h2>Driver License Test Results</h2>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1f1qGHroHPwjZ5MLxmQ71tGXigOFRPg01mqbRzEQ31yw/edit?usp=sharing', '_blank')">View Driver License Test Results</button>
 </div>
 
 <div class="dashboard-section">
   <h2>CDL Test Results</h2>
-  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1eGy9c8R8Ws0JJyJmVz7mvGp4GVsP_SmF/edit?usp=sharing', '_blank')">View CDL Test Results</button>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1Wn7hPFTKexThO0r_Ma4pABfUih3-suJwYtzRxk-f4UQ/edit?usp=sharing', '_blank')">View CDL Test Results</button>
 </div>
-
-
-    <div class="dashboard-section">
-      <h2>Permit Test Results</h2>
-      <button onclick="window.open('https://docs.google.com/spreadsheets/d/1QEJtr7tFbyRUNuY2yLOFZR7zeBPK9DXr34LEg2m21Yg/edit?usp=sharing', '_blank')">View Permit Test Results</button>
-    </div>
-
-    </div>
 
     <button onclick="showScreen('landingScreen')" style="margin-top: 40px;">Back</button>
   </div>
@@ -463,10 +456,10 @@ const idRenewals = [];
 
   <div class="screen" id="testMenu" style="text-align: center; padding-top: 100px;">
     <h2>Select a Test Type</h2>
-    <button onclick="window.open('https://forms.gle/CG3qnyqMWVZAxZaR6', '_blank')" style="margin: 15px; padding: 15px 30px;">Permit Test</button>
-    <button onclick="window.open('https://forms.gle/CG3qnyqMWVZAxZaR6', '_blank')" style="margin: 15px; padding: 15px 30px;">Driver's License Test</button>
-    <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScFhOLZWc6cE6R7cD5LWENC-pT3mk4hQe3kWNJ6TMXAPSr43Q/viewform?usp=header', '_blank')" style="margin: 15px; padding: 15px 30px;">Motorcycle License Test</button>
-    <button onclick="window.open('https://forms.gle/WnT8C9dj2ncXsfAf9', '_blank')" style="margin: 15px; padding: 15px 30px;">CDL Test</button>
+    <button onclick="alert('Launching Permit Test...')" style="margin: 15px; padding: 15px 30px;">Permit Test</button>
+    <button onclick="alert('Launching Driver's License Test...')" style="margin: 15px; padding: 15px 30px;">Driver's License Test</button>
+    <button onclick="alert('Launching Motorcycle License Test...')" style="margin: 15px; padding: 15px 30px;">Motorcycle License Test</button>
+    <button onclick="alert('Launching CDL Test...')" style="margin: 15px; padding: 15px 30px;">CDL Test</button>
     <br><br>
     <button onclick="showScreen('userDashboard')" style="margin-top: 40px;">Back</button>
   </div>
@@ -481,31 +474,24 @@ const idRenewals = [];
     
     <div class="dashboard-section">
       <h2>Driver’s License Test Results</h2>
-      
-<ul id="adminDriverResults"></ul>
+      <ul id="adminDriverResults"></ul>
+    </div>
 
+    
 <div class="dashboard-section">
   <h2>Motorcycle License Test Results</h2>
-  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1QhVnMPq0gKXrKjEQfOa9FJmTxY6pPbWa/edit?usp=sharing', '_blank')">View Motorcycle Test Results</button>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1QEJtr7tFbyRUNuY2yLOFZR7zeBPK9DXr34LEg2m21Yg/edit?usp=sharing', '_blank')">View Motorcycle Test Results</button>
 </div>
 
 <div class="dashboard-section">
-  <h2>Driving Test Results</h2>
-  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1qRH_1L2LBnq6S4VODIjvW3r0p-DL6OcJ/edit?usp=sharing', '_blank')">View Driving Test Results</button>
+  <h2>Driver License Test Results</h2>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1f1qGHroHPwjZ5MLxmQ71tGXigOFRPg01mqbRzEQ31yw/edit?usp=sharing', '_blank')">View Driver License Test Results</button>
 </div>
 
 <div class="dashboard-section">
   <h2>CDL Test Results</h2>
-  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1eGy9c8R8Ws0JJyJmVz7mvGp4GVsP_SmF/edit?usp=sharing', '_blank')">View CDL Test Results</button>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1Wn7hPFTKexThO0r_Ma4pABfUih3-suJwYtzRxk-f4UQ/edit?usp=sharing', '_blank')">View CDL Test Results</button>
 </div>
-
-
-    <div class="dashboard-section">
-      <h2>Permit Test Results</h2>
-      <button onclick="window.open('https://docs.google.com/spreadsheets/d/1QEJtr7tFbyRUNuY2yLOFZR7zeBPK9DXr34LEg2m21Yg/edit?usp=sharing', '_blank')">View Permit Test Results</button>
-    </div>
-
-    </div>
 
     <button onclick="showScreen('landingScreen')" style="margin-top: 40px;">Back</button>
   </div>
@@ -581,11 +567,4 @@ const idRenewals = [];
   </div>
 
 </body>
-</html>
-    <div class="screen" id="renewalRequests" style="text-align: center; padding-top: 100px;">
-      <h2>Renewal Request Panel</h2>
-      <button onclick="alert('Opening ID Renewal Queue...')" style="margin: 15px; padding: 15px 30px;">ID Card Renewals</button>
-      <button onclick="alert('Opening Motorcycle Permit Renewals...')" style="margin: 15px; padding: 15px 30px;">Motorcycle Permit Renewals</button>
-      <button onclick="showScreen('adminMenu')" style="margin-top: 30px;">Back</button>
-    </div>
-    
+</html> 
