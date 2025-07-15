@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>San Andreas DMV Unified Portal</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+  <style>
+    body, html {
+      margin: 0; padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f4f4;
+    }
+    .screen {
+      display: none;
+      padding: 20px;
+    }
+    .active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+    }
+    button {
+      background-color: #003764;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    header {
+      background-color: #003764;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .hidden { display: none; }
+    .dashboard-section {
+      background: white;
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    footer {
+      text-align: center;
+      background: #003764;
+      color: white;
+      padding: 20px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  
+  <div class="screen active" id="landingScreen" style="
+    background: url('Portal background.png') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  ">
+    <header style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px;">
+      <h1 style="color: white;">San Andreas DMV</h1>
+    </header>
+    <div style="margin-top: 30px;">
+      <button onclick="showScreen('loginScreen')" style="margin: 20px; padding: 15px 30px;">Login</button>
+      <button onclick="showScreen('signupScreen')" style="margin: 20px; padding: 15px 30px;">Sign Up</button>
+      <button onclick="employeeLogin()" style="margin: 20px; padding: 15px 30px;">Employee Portal</button>
+    </div>
+  </div>
+
+  </div>
+
+  <div class="screen" id="signupScreen">
+    <h2>Create Your DMV Account</h2>
+    <div class="form-group">
+      <label>First Name</label><input type="text" id="signupFirst">
+    </div>
+    <div class="form-group">
+      <label>Last Name</label><input type="text" id="signupLast">
+    </div>
+    <div class="form-group">
+      <label>Character SSN/SIN</label><input type="text" id="signupSSN">
+    </div>
+    
+    <div class="form-group">
+      <label>Gender</label>
+      <select id="signupGender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+
+    <button onclick="registerUser()">Sign Up</button>
+    <p><a href="#" onclick="showScreen('loginScreen')">Already have an account?</a></p>
+  </div>
+
+  <div class="screen" id="loginScreen">
+  <div id="quickLoginOptions" style="margin-bottom: 20px;"></div>
+
+    <h2>Log In to Your DMV Account</h2>
+    <div class="form-group">
+      <label>First Name</label><input type="text" id="loginFirst">
+    </div>
+    <div class="form-group">
+      <label>Last Name</label><input type="text" id="loginLast">
+    </div>
+    <div class="form-group">
+      <label>Character SSN/SIN</label><input type="text" id="loginSSN">
+    </div>
+    <button onclick="loginUser()">Login</button>
+    <p><a href="#" onclick="showScreen('signupScreen')">Create an account</a></p>
+  </div>
+
+  <div class="screen" id="userDashboard">
+    <header><h1>Welcome to the DMV Portal</h1></header>
+    <div class="dashboard-section">
+      <h3>Your Applications</h3>
+      <ul id="userApplications"></ul>
+    
+    <div class="dashboard-section">
+      <h3>Submit ID Renewal Application</h3>
+      <div class="form-group">
+        <label>Reason for Renewal</label>
+        <input type="text" id="renewReason" placeholder="e.g. Lost ID, Expired, Name change">
+      </div>
+      <button onclick="submitRenewal()">Submit ID Renewal</button>
+    </div>
+</div>
+    <div class="dashboard-section">
+      <h3>Apply for a Service</h3>
+      <button onclick="showScreen('testMenu')">Test</button>
+      
+    </div>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <div class="screen" id="adminDashboard">
+    <header><h1>San Andreas DMV – Admin Dashboard</h1></header>
+    <div class="dashboard-section">
+      <h2>License Test Submissions</h2><a href="#">View License Test Results</a>
+    </div>
+    <div class="dashboard-section">
+      <h2>Permit Test Submissions</h2><a href="#">View Permit Test Results</a>
+    </div>
+    <div class="dashboard-section">
+      <h2>ID Card Renewals</h2><a href="#">Review ID Renewal Requests</a>
+    
+    <div class="dashboard-section">
+      <h2>Submitted ID Renewals</h2>
+      <ul id="adminRenewalLog"></ul>
+    </div>
+</div>
+    <button onclick="showScreen('landingScreen')">Back to Main</button>
+  </div>
+
+  <footer>&copy; 2025 San Andreas Department of Motor Vehicles</footer>
+
+  <script>
+    const users = [];
+
+function renderAdminDriverResults() {
+  const list = document.getElementById('adminDriverResults');
+  if (!list || !window.driverTestResults) return;
+  list.innerHTML = '';
+  driverTestResults.forEach(entry => {
+    const li = document.createElement('li');
+    li.textContent = entry;
+    list.appendChild(li);
+  });
+}
+
+
+function gradeDriversTest() {
+  const answers = {
+    q1: 'low', q2: 'broken', q3: 'sell', q4: 'noclear', q5: 'right',
+    q6: 'never', q7: '001', q8: '65', q9: 'stop', q10: 'prevent'
+  };
+  let score = 0;
+  const total = Object.keys(answers).length;
+  for (let key in answers) {
+    const selected = document.querySelector(`input[name="${key}"]:checked`);
+    if (selected && selected.value === answers[key]) score++;
+  }
+  const percent = (score / total) * 100;
+  const passed = percent >= 80;
+  const result = `You scored ${score}/${total} (${Math.round(percent)}%). ${passed ? '✅ Passed!' : '❌ Not passed.'}`;
+  document.getElementById('driversResult').innerText = result;
+
+  const user = getCurrentUser?.() || { first: 'Unknown', last: 'User', ssn: 'N/A' };
+  if (!window.driverTestResults) window.driverTestResults = [];
+  driverTestResults.push(`${user.first} ${user.last} (${user.ssn}): ${Math.round(percent)}% — ${passed ? 'Passed' : 'Failed'}`);
+}
+
+function saveLoginCharacter(user) {
+      let saved = JSON.parse(localStorage.getItem('dmvLogins')) || [];
+      const exists = false;
+      if (!exists) {
+        saved.push({ first: user.first, last: user.last, ssn: user.ssn, gender: user.gender });
+        localStorage.setItem('dmvLogins', JSON.stringify(saved));
+      }
+    }
+
+    function showQuickLogins() {
+      const saved = JSON.parse(localStorage.getItem('dmvLogins')) || [];
+      const container = document.getElementById('quickLoginOptions');
+      container.innerHTML = '<h3>Quick Login:</h3>';
+      saved.forEach(u => {
+        
+        const avatar = document.createElement('img');
+        avatar.src = u.gender === 'female' ? 'https://i.imgur.com/LZPTzZG.png' : 'https://i.imgur.com/0y0a3zf.png';
+        avatar.alt = u.gender;
+        avatar.style.width = '60px';
+        avatar.style.height = '60px';
+        avatar.style.borderRadius = '50%';
+        avatar.style.display = 'block';
+        avatar.style.margin = '0 auto 8px auto';
+        container.appendChild(avatar);
+
+        const btn = document.createElement('button');
+        btn.textContent = `${u.first} ${u.last}`;
+        btn.style.display = 'block';
+        btn.style.marginBottom = '10px';
+        btn.onclick = () => {
+          const match = users.find(x => x.first === u.first && x.last === u.last && x.ssn === u.ssn && x.pass === u.pass);
+          if (match) {
+            document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
+            showScreen('userDashboard');
+          } else {
+            alert('Saved character no longer exists in memory. Please log in again.');
+          }
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    // Call when login screen is shown
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      if (id === 'loginScreen') showQuickLogins();
+    }
+const idRenewals = [];
+
+    function submitRenewal() {
+      const reason = document.getElementById('renewReason').value.trim();
+      if (!reason) return alert('Please enter a reason.');
+      const currentUser = users.find(u =>
+        u.first === document.getElementById('loginFirst').value.trim() &&
+        u.last === document.getElementById('loginLast').value.trim() &&
+        u.ssn === document.getElementById('loginSSN').value.trim()
+      );
+      if (currentUser) {
+        const entry = `${currentUser.first} ${currentUser.last} (${currentUser.ssn}): ${reason}`;
+        idRenewals.push(entry);
+        document.getElementById('userApplications').innerHTML += `<li>ID Renewal - Submitted</li>`;
+        alert('Your renewal application has been submitted.');
+      }
+    }
+
+    function renderAdminRenewals() {
+      const list = document.getElementById('adminRenewalLog');
+      list.innerHTML = '';
+      idRenewals.forEach(app => {
+        const li = document.createElement('li');
+        li.textContent = app;
+        list.appendChild(li);
+      });
+    }
+
+    function employeeLogin() {
+      const pw = prompt('Enter employee password:');
+      if (pw === 'DMV.EOTS') {
+        showScreen('adminMenu');
+        renderAdminRenewals();
+        renderAdminDriverResults();
+      } else {
+        alert('Incorrect password.');
+      }
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function registerUser() {
+      const user = {
+        first: document.getElementById('signupFirst').value.trim(),
+        last: document.getElementById('signupLast').value.trim(),
+        ssn: document.getElementById('signupSSN').value.trim(),
+        
+        gender: document.getElementById('signupGender').value
+      };
+      if (user.first && user.last && user.ssn ) {
+        users.push(user);
+        alert('Account created successfully!');
+        showScreen('loginScreen');
+      } else {
+        alert('Please fill in all fields.');
+      }
+    }
+
+    function loginUser() {
+      const first = document.getElementById('loginFirst').value.trim();
+      const last = document.getElementById('loginLast').value.trim();
+      const ssn = document.getElementById('loginSSN').value.trim();
+            const user = users.find(u => u.first === first && u.last === last && u.ssn === ssn );
+      if (user) {
+        saveLoginCharacter(user);
+        document.getElementById('userApplications').innerHTML = `<li>ID Renewal - Pending</li><li>License Test - Scheduled</li>`;
+        showScreen('userDashboard');
+      } else {
+        alert('Invalid login credentials.');
+      }
+    }
+
+    function logout() {
+      showScreen('landingScreen');
+    }
+
+    function employeeLogin() {
+      const pw = prompt('Enter employee password:');
+      if (pw === 'DMV.EOTS') {
+        showScreen('adminMenu');
+      } else {
+        alert('Incorrect password.');
+      }
+    }
+  </script>
+
+  <div class="screen" id="testMenu" style="text-align: center; padding-top: 100px;">
+    <h2>Select a Test Type</h2>
+    <button onclick="window.open('https://forms.gle/CG3qnyqMWVZAxZaR6', '_blank')" style="margin: 15px; padding: 15px 30px;">Permit Test</button>
+    <button onclick="window.open('https://forms.gle/CG3qnyqMWVZAxZaR6', '_blank')" style="margin: 15px; padding: 15px 30px;">Driver's License Test</button>
+    <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScFhOLZWc6cE6R7cD5LWENC-pT3mk4hQe3kWNJ6TMXAPSr43Q/viewform?usp=header', '_blank')" style="margin: 15px; padding: 15px 30px;">Motorcycle License Test</button>
+    <button onclick="window.open('https://forms.gle/WnT8C9dj2ncXsfAf9', '_blank')" style="margin: 15px; padding: 15px 30px;">CDL Test</button>
+    <br><br>
+    <button onclick="showScreen('userDashboard')" style="margin-top: 40px;">Back</button>
+  </div>
+
+
+  <div class="screen" id="adminMenu" style="text-align: center; padding-top: 100px;">
+    <h2>DMV Employee Panel</h2>
+    <button onclick="showScreen('vehicleInspectionForm')" style="margin: 15px; padding: 15px 30px;">Vehicle Inspection Form</button>
+    <button onclick="showScreen('adminDashboard')" style="margin: 15px; padding: 15px 30px;">Test Results</button>
+    <button onclick="showScreen('renewalRequests')" style="margin: 15px; padding: 15px 30px;">Renewal Requests</button>
+    <br><br>
+    
+    <div class="dashboard-section">
+      <h2>Driver’s License Test Results</h2>
+      
+<ul id="adminDriverResults"></ul>
+
+<div class="dashboard-section">
+  <h2>Motorcycle License Test Results</h2>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1QhVnMPq0gKXrKjEQfOa9FJmTxY6pPbWa/edit?usp=sharing', '_blank')">View Motorcycle Test Results</button>
+</div>
+
+<div class="dashboard-section">
+  <h2>Driving Test Results</h2>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1qRH_1L2LBnq6S4VODIjvW3r0p-DL6OcJ/edit?usp=sharing', '_blank')">View Driving Test Results</button>
+</div>
+
+<div class="dashboard-section">
+  <h2>CDL Test Results</h2>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1eGy9c8R8Ws0JJyJmVz7mvGp4GVsP_SmF/edit?usp=sharing', '_blank')">View CDL Test Results</button>
+</div>
+
+
+    <div class="dashboard-section">
+      <h2>Permit Test Results</h2>
+      <button onclick="window.open('https://docs.google.com/spreadsheets/d/1QEJtr7tFbyRUNuY2yLOFZR7zeBPK9DXr34LEg2m21Yg/edit?usp=sharing', '_blank')">View Permit Test Results</button>
+    </div>
+
+    </div>
+
+    <button onclick="showScreen('landingScreen')" style="margin-top: 40px;">Back</button>
+  </div>
+
+
+  <div class="screen" id="driversTestScreen">
+    <h2>Driver’s License Test</h2>
+    <form id="driversForm">
+      <div class="form-group">
+        <label>1. When driving in fog, you should use your:</label><br>
+        <input type="radio" name="q1" value="low"> Low beams<br>
+        <input type="radio" name="q1" value="high"> High beams<br>
+        <input type="radio" name="q1" value="parking"> Parking lights<br>
+      </div>
+      <div class="form-group">
+        <label>2. A solid yellow line next to a broken yellow line means:</label><br>
+        <input type="radio" name="q2" value="broken"> Vehicles next to the broken line may pass<br>
+        <input type="radio" name="q2" value="solid"> Vehicles next to the solid line may pass<br>
+        <input type="radio" name="q2" value="both"> Vehicles in both directions may pass<br>
+      </div>
+      <div class="form-group">
+        <label>3. You must notify DMV within 5 days if you:</label><br>
+        <input type="radio" name="q3" value="sell"> Sell or transfer your vehicle<br>
+        <input type="radio" name="q3" value="smog"> Fail a smog test<br>
+        <input type="radio" name="q3" value="insurance"> Get a new car insurance policy<br>
+      </div>
+      <div class="form-group">
+        <label>4. Always stop before crossing railroad tracks when:</label><br>
+        <input type="radio" name="q4" value="noclear"> You can't see 400 feet in both directions<br>
+        <input type="radio" name="q4" value="crossbuck"> The crossing has a crossbuck sign<br>
+        <input type="radio" name="q4" value="notrain"> You don’t see a train<br>
+      </div>
+      <div class="form-group">
+        <label>5. Parking uphill with no curb, front wheels should be:</label><br>
+        <input type="radio" name="q5" value="right"> Turned to the right (away from street)<br>
+        <input type="radio" name="q5" value="left"> Turned to the left (toward street)<br>
+        <input type="radio" name="q5" value="parallel"> Parallel with pavement<br>
+      </div>
+      <div class="form-group">
+        <label>6. You may legally block an intersection:</label><br>
+        <input type="radio" name="q6" value="never"> Under no circumstances<br>
+        <input type="radio" name="q6" value="green"> If you entered on green<br>
+        <input type="radio" name="q6" value="rush"> During rush hour<br>
+      </div>
+      <div class="form-group">
+        <label>7. Illegal BAC under age 21 is:</label><br>
+        <input type="radio" name="q7" value="001"> 0.01% or higher<br>
+        <input type="radio" name="q7" value="008"> 0.08% or higher<br>
+        <input type="radio" name="q7" value="005"> 0.05% or higher<br>
+      </div>
+      <div class="form-group">
+        <label>8. On a 65mph freeway, traffic is 70mph. You may legally drive:</label><br>
+        <input type="radio" name="q8" value="65"> No faster than 65 mph<br>
+        <input type="radio" name="q8" value="70"> 70 mph to keep up<br>
+        <input type="radio" name="q8" value="any"> As fast as you want<br>
+      </div>
+      <div class="form-group">
+        <label>9. No crosswalk, pedestrian in lane. You should:</label><br>
+        <input type="radio" name="q9" value="stop"> Stop and let them cross<br>
+        <input type="radio" name="q9" value="go"> Carefully drive around<br>
+        <input type="radio" name="q9" value="back"> Make them go back<br>
+      </div>
+      <div class="form-group">
+        <label>10. When should you yield your legal right-of-way?</label><br>
+        <input type="radio" name="q10" value="prevent"> When it helps prevent collisions<br>
+        <input type="radio" name="q10" value="green"> At green lights<br>
+        <input type="radio" name="q10" value="never"> Never<br>
+      </div>
+      <button type="button" onclick="gradeDriversTest()">Submit Test</button>
+    </form>
+    <div id="driversResult" style="margin-top: 20px;"></div>
+    <button onclick="showScreen('testMenu')" style="margin-top: 20px;">Back</button>
+  </div>
+
+</body>
+</html>
+
+
+
+  <div class="screen" id="testMenu" style="text-align: center; padding-top: 100px;">
+    <h2>Select a Test Type</h2>
+    <button onclick="window.open('https://forms.gle/CG3qnyqMWVZAxZaR6', '_blank')" style="margin: 15px; padding: 15px 30px;">Permit Test</button>
+    <button onclick="window.open('https://forms.gle/CG3qnyqMWVZAxZaR6', '_blank')" style="margin: 15px; padding: 15px 30px;">Driver's License Test</button>
+    <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLScFhOLZWc6cE6R7cD5LWENC-pT3mk4hQe3kWNJ6TMXAPSr43Q/viewform?usp=header', '_blank')" style="margin: 15px; padding: 15px 30px;">Motorcycle License Test</button>
+    <button onclick="window.open('https://forms.gle/WnT8C9dj2ncXsfAf9', '_blank')" style="margin: 15px; padding: 15px 30px;">CDL Test</button>
+    <br><br>
+    <button onclick="showScreen('userDashboard')" style="margin-top: 40px;">Back</button>
+  </div>
+
+
+  <div class="screen" id="adminMenu" style="text-align: center; padding-top: 100px;">
+    <h2>DMV Employee Panel</h2>
+    <button onclick="showScreen('vehicleInspectionForm')" style="margin: 15px; padding: 15px 30px;">Vehicle Inspection Form</button>
+    <button onclick="showScreen('adminDashboard')" style="margin: 15px; padding: 15px 30px;">Test Results</button>
+    <button onclick="showScreen('renewalRequests')" style="margin: 15px; padding: 15px 30px;">Renewal Requests</button>
+    <br><br>
+    
+    <div class="dashboard-section">
+      <h2>Driver’s License Test Results</h2>
+      
+<ul id="adminDriverResults"></ul>
+
+<div class="dashboard-section">
+  <h2>Motorcycle License Test Results</h2>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1QhVnMPq0gKXrKjEQfOa9FJmTxY6pPbWa/edit?usp=sharing', '_blank')">View Motorcycle Test Results</button>
+</div>
+
+<div class="dashboard-section">
+  <h2>Driving Test Results</h2>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1qRH_1L2LBnq6S4VODIjvW3r0p-DL6OcJ/edit?usp=sharing', '_blank')">View Driving Test Results</button>
+</div>
+
+<div class="dashboard-section">
+  <h2>CDL Test Results</h2>
+  <button onclick="window.open('https://docs.google.com/spreadsheets/d/1eGy9c8R8Ws0JJyJmVz7mvGp4GVsP_SmF/edit?usp=sharing', '_blank')">View CDL Test Results</button>
+</div>
+
+
+    <div class="dashboard-section">
+      <h2>Permit Test Results</h2>
+      <button onclick="window.open('https://docs.google.com/spreadsheets/d/1QEJtr7tFbyRUNuY2yLOFZR7zeBPK9DXr34LEg2m21Yg/edit?usp=sharing', '_blank')">View Permit Test Results</button>
+    </div>
+
+    </div>
+
+    <button onclick="showScreen('landingScreen')" style="margin-top: 40px;">Back</button>
+  </div>
+
+
+  <div class="screen" id="driversTestScreen">
+    <h2>Driver’s License Test</h2>
+    <form id="driversForm">
+      <div class="form-group">
+        <label>1. When driving in fog, you should use your:</label><br>
+        <input type="radio" name="q1" value="low"> Low beams<br>
+        <input type="radio" name="q1" value="high"> High beams<br>
+        <input type="radio" name="q1" value="parking"> Parking lights<br>
+      </div>
+      <div class="form-group">
+        <label>2. A solid yellow line next to a broken yellow line means:</label><br>
+        <input type="radio" name="q2" value="broken"> Vehicles next to the broken line may pass<br>
+        <input type="radio" name="q2" value="solid"> Vehicles next to the solid line may pass<br>
+        <input type="radio" name="q2" value="both"> Vehicles in both directions may pass<br>
+      </div>
+      <div class="form-group">
+        <label>3. You must notify DMV within 5 days if you:</label><br>
+        <input type="radio" name="q3" value="sell"> Sell or transfer your vehicle<br>
+        <input type="radio" name="q3" value="smog"> Fail a smog test<br>
+        <input type="radio" name="q3" value="insurance"> Get a new car insurance policy<br>
+      </div>
+      <div class="form-group">
+        <label>4. Always stop before crossing railroad tracks when:</label><br>
+        <input type="radio" name="q4" value="noclear"> You can't see 400 feet in both directions<br>
+        <input type="radio" name="q4" value="crossbuck"> The crossing has a crossbuck sign<br>
+        <input type="radio" name="q4" value="notrain"> You don’t see a train<br>
+      </div>
+      <div class="form-group">
+        <label>5. Parking uphill with no curb, front wheels should be:</label><br>
+        <input type="radio" name="q5" value="right"> Turned to the right (away from street)<br>
+        <input type="radio" name="q5" value="left"> Turned to the left (toward street)<br>
+        <input type="radio" name="q5" value="parallel"> Parallel with pavement<br>
+      </div>
+      <div class="form-group">
+        <label>6. You may legally block an intersection:</label><br>
+        <input type="radio" name="q6" value="never"> Under no circumstances<br>
+        <input type="radio" name="q6" value="green"> If you entered on green<br>
+        <input type="radio" name="q6" value="rush"> During rush hour<br>
+      </div>
+      <div class="form-group">
+        <label>7. Illegal BAC under age 21 is:</label><br>
+        <input type="radio" name="q7" value="001"> 0.01% or higher<br>
+        <input type="radio" name="q7" value="008"> 0.08% or higher<br>
+        <input type="radio" name="q7" value="005"> 0.05% or higher<br>
+      </div>
+      <div class="form-group">
+        <label>8. On a 65mph freeway, traffic is 70mph. You may legally drive:</label><br>
+        <input type="radio" name="q8" value="65"> No faster than 65 mph<br>
+        <input type="radio" name="q8" value="70"> 70 mph to keep up<br>
+        <input type="radio" name="q8" value="any"> As fast as you want<br>
+      </div>
+      <div class="form-group">
+        <label>9. No crosswalk, pedestrian in lane. You should:</label><br>
+        <input type="radio" name="q9" value="stop"> Stop and let them cross<br>
+        <input type="radio" name="q9" value="go"> Carefully drive around<br>
+        <input type="radio" name="q9" value="back"> Make them go back<br>
+      </div>
+      <div class="form-group">
+        <label>10. When should you yield your legal right-of-way?</label><br>
+        <input type="radio" name="q10" value="prevent"> When it helps prevent collisions<br>
+        <input type="radio" name="q10" value="green"> At green lights<br>
+        <input type="radio" name="q10" value="never"> Never<br>
+      </div>
+      <button type="button" onclick="gradeDriversTest()">Submit Test</button>
+    </form>
+    <div id="driversResult" style="margin-top: 20px;"></div>
+    <button onclick="showScreen('testMenu')" style="margin-top: 20px;">Back</button>
+  </div>
+
+</body>
+</html>
+    <div class="screen" id="renewalRequests" style="text-align: center; padding-top: 100px;">
+      <h2>Renewal Request Panel</h2>
+      <button onclick="alert('Opening ID Renewal Queue...')" style="margin: 15px; padding: 15px 30px;">ID Card Renewals</button>
+      <button onclick="alert('Opening Motorcycle Permit Renewals...')" style="margin: 15px; padding: 15px 30px;">Motorcycle Permit Renewals</button>
+      <button onclick="showScreen('adminMenu')" style="margin-top: 30px;">Back</button>
+    </div>
+    
